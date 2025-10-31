@@ -1,0 +1,18 @@
+{
+  "frame": {
+    "name": "MagicMito @ Base",
+    "version": "1",
+    "iconUrl": "https://magicmito.vercel.app/icon.png",
+    "homeUrl": "https://magicmito.vercel.app",
+    "imageUrl": "https://magicmito.vercel.app/image.png",
+    "buttonTitle": "Rock n Roll",
+    "splashImageUrl": "https://magicmito.vercel.app/splash.png",
+    "splashBackgroundColor": "#CCCAE8",
+    "subtitle": "A Quickie to train your brain power ",
+    "description": "Bringing the Magic of Mito into Base App is my pleasure",
+    "primaryCategory": "games",
+    "screenshotUrls": [
+      "https://magicmito.vercel.app/screenshot1.png"
+    ]
+  }
+}
