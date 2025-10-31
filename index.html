@@ -1,58 +1,236 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Magic Mito</title>
-  
-  <!-- Farcaster Frame Meta Tags -->
-  <meta property="fc:frame" content="vNext" />
-  <meta property="fc:frame:image" content="https://magicmito.vercel.app/image.png" />
-  <meta property="fc:frame:image:aspect_ratio" content="1.91:1" />
-  <meta property="fc:frame:button:1" content="Open App" />
-  <meta property="fc:frame:button:1:action" content="link" />
-  <meta property="fc:frame:button:1:target" content="https://magicmito.vercel.app/app.html" />
-  
-  <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="Magic Mito @ Base" />
-  <meta property="og:description" content="Bringing the Magic of Mito into Base App is my pleasure" />
-  <meta property="og:image" content="https://magicmito.vercel.app/image.png" />
-  <meta property="og:url" content="https://magicmito.vercel.app" />
-  <meta property="og:type" content="website" />
-  
-  <!-- Twitter Card Meta Tags -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Magic Mito" />
-  <meta name="twitter:description" content="Bringing the Magic of Mito into Base App is my pleasure" />
-  <meta name="twitter:image" content="https://magicmito.vercel.app/image.png" />
-  
-  <!-- Base SDK -->
-  <script src="https://base.org/sdk.js"></script>
+  <title>#MagicMito</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #000000;
+      color: #f0f0f0;
+      padding: 20px;
+    }
+    .game-board {
+      display: grid;
+      gap: 12px;
+      width: 100%;
+      max-width: 800px;
+      margin-top: 20px;
+    }
+    .card {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #7c3aed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.5s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+    .card img {
+      display: none;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 16px;
+    }
+    .card.flipped img {
+      display: block;
+    }
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+      #winModal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      display: none;
+    }
+
+    #winModal .modal-content {
+      background: #2c2c3a;
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      color: #fff;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+      animation: popin 0.4s ease-out forwards;
+    }
+
+    @keyframes popin {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }  
+      button:hover {
+      filter: brightness(1.2);
+      transform: scale(1.03);
+    }
+</style>
 </head>
 <body>
-  <!-- Initialize Base SDK and send ready signal -->
-  <script>
-    // Initialize Base SDK
-    if (typeof sdk !== 'undefined' && sdk.actions) {
-      sdk.actions.ready();
-    }
-    
-    // Fallback for parent window
-    if (window.parent) {
-      window.parent.postMessage({ type: 'ready' }, '*');
-    }
-    
-    // Redirect to main app after a short delay
-    setTimeout(() => {
-      window.location.href = 'https://magicmito.vercel.app/index.html';
-    }, 100);
-  </script>
-  
-  <div style="text-align: center; padding: 50px; font-family: Arial;">
-    <h1>Magic Mito</h1>
-    <p>Redirecting to app...</p>
-    <p>If not redirected, <a href="https://magicmito.vercel.app/index.html">click here</a></p>
+  <img src="mito2.png" alt="#MagicMito Logo" style="max-height: 100px; margin-bottom: 10px;">
+  <div id="stageButtons" style="display: flex; gap: 10px; justify-content: center; margin-top: 10px;">
+    <button style="font-size: 1.4rem; padding: 10px 20px; width: 154px; background-color: #3b82f6; color: white; border: none; border-radius: 8px;" onclick="selectStage('4x3')">Stage 1</button>
+    <button style="font-size: 1.4rem; padding: 10px 20px; width: 154px; background-color: #3b82f6; color: white; border: none; border-radius: 8px;" onclick="selectStage('4x4')">Stage 2</button>
+    <button style="font-size: 1.4rem; padding: 10px 20px; width: 154px; background-color: #3b82f6; color: white; border: none; border-radius: 8px;" onclick="selectStage('5x4')">Stage 3</button>
   </div>
+  <div style="display: flex; align-items: center; gap: 20px; justify-content: center; margin-top: 15px; font-size: 2rem; font-weight: bold;">
+    <div id="status">Moves: 0 | Time: 0s</div>
+    <button id="restartBtn" style="font-size: 1.2rem; padding: 8px 16px; width: 140px; background-color: #3b82f6; color: white; border: none; border-radius: 8px;" onclick="restartGame()">#MagicMito</button>
+  </div>
+  <div class="game-board" id="gameBoard"></div>
+
+  <div id="winModal">
+    <div class="modal-content">
+      <h2>🎉 Gmito!</h2>
+      <p id="resultText"></p>
+      <button style="font-size: 2rem; padding: 14px 28px; width: 220px;" onclick="closeModal()">Play Again</button>
+    </div>
+  </div>
+
+  <audio id="flipSound" src="flip.mp3"></audio>
+  <audio id="matchSound" src="match.mp3"></audio>
+
+  <script>
+    const allCards = [...Array(10)].map((_, i) => ({ id: i + 1, name: `Bear ${i + 1}`, image: `morse${i + 1}.png` }));
+    const board = document.getElementById('gameBoard');
+    const status = document.getElementById('status');
+    const flipSound = document.getElementById('flipSound');
+    const matchSound = document.getElementById('matchSound');
+    const modal = document.getElementById('winModal');
+    const resultText = document.getElementById('resultText');
+
+    let flipped = [], deck = [], moves = 0, matches = 0, timer, seconds = 0, selectedStage = '4x3';
+    let lockBoard = false;
+
+    function updateStatus() {
+      status.textContent = `Moves: ${moves} | Time: ${seconds}s`;
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      seconds = 0;
+      timer = setInterval(() => {
+        seconds++;
+        updateStatus();
+      }, 1000);
+    }
+
+    function shuffle(array) {
+      return array.map(a => ({ ...a, uid: Math.random() })).sort(() => 0.5 - Math.random());
+    }
+
+    function showConfetti() {
+      for (let i = 0; i < 100; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 60%)`;
+        confetti.style.left = Math.random() * 100 + 'vw';
+        confetti.style.top = '-10px';
+        confetti.style.animationDuration = (Math.random() * 2 + 1) + 's';
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 3000);
+      }
+    }
+
+    function checkMatch() {
+      const [first, second] = flipped;
+      if (deck[first].id !== deck[second].id) {
+        lockBoard = true;
+        setTimeout(() => {
+          document.querySelectorAll('.card')[first].classList.remove('flipped');
+          document.querySelectorAll('.card')[second].classList.remove('flipped');
+          flipped = [];
+          lockBoard = false;
+        }, 1000);
+      } else {
+        matchSound.play();
+        matches++;
+        flipped = [];
+        if (matches === deck.length / 2) {
+          clearInterval(timer);
+          setTimeout(() => {
+            resultText.textContent = `You completed the game in: ${moves} moves and ${seconds} seconds!`;
+            modal.style.display = 'flex';
+            showConfetti();
+          }, 500);
+        }
+      }
+    }
+
+    function createBoard(rows, cols) {
+      board.innerHTML = '';
+      board.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+      deck.forEach((card, index) => {
+        let div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `<img src="${card.image}" alt="${card.name}">`;
+        div.addEventListener('click', () => {
+          if (lockBoard || div.classList.contains('flipped') || flipped.length >= 2) return;
+          div.classList.add('flipped');
+          flipSound.play();
+          flipped.push(index);
+          if (flipped.length === 2) {
+            moves++;
+            updateStatus();
+            checkMatch();
+          }
+        });
+        board.appendChild(div);
+      });
+    }
+
+    function selectStage(stage) {
+      selectedStage = stage;
+      startGame();
+    }
+
+    function startGame() {
+      clearInterval(timer);
+      seconds = 0;
+      let [cols, rows] = selectedStage.split('x').map(Number);
+      const pairCount = (rows * cols) / 2;
+      deck = shuffle([...allCards].slice(0, pairCount));
+      deck = shuffle([...deck, ...deck]);
+      flipped = [];
+      moves = 0;
+      matches = 0;
+      lockBoard = false;
+      updateStatus();
+      startTimer();
+      modal.style.display = 'none';
+      createBoard(rows, cols);
+    }
+
+    function restartGame() {
+      startGame();
+    }
+
+    function closeModal() {
+      modal.style.display = 'none';
+      restartGame();
+    }
+  </script>
 </body>
 </html>
+
+
 
