@@ -1,0 +1,29 @@
+{
+  "accountAssociation": {
+    "header": "YOUR_HEADER_FROM_GENERATE_BUTTON",
+    "payload": "YOUR_PAYLOAD_FROM_GENERATE_BUTTON",
+    "signature": "YOUR_SIGNATURE_FROM_GENERATE_BUTTON"
+  },
+  "miniapp": {
+    "name": "Magic Mito",
+    "version": "1",
+    "iconUrl": "https://magicmito.vercel.app/icon.png",
+    "homeUrl": "https://magicmito.vercel.app",
+    "imageUrl": "https://magicmito.vercel.app/image.png",
+    "buttonTitle": "Open mini app",
+    "splashImageUrl": "https://magicmito.vercel.app/splash.png",
+    "splashBackgroundColor": "#6200EA",
+    "subtitle": "Connect and share instantly",
+    "description": "Experience the future of social networking. Connect with friends, share moments, and discover communities.",
+    "primaryCategory": "social",
+    "tags": ["social", "messaging", "community"],
+    "screenshotUrls": [
+      "https://magicmito.vercel.app/screenshot1.png"
+    ],
+    "ogTitle": "Magic Mito - Local News Fast",
+    "ogImageUrl": "https://magicmito.vercel.app/image.png"
+  },
+  "baseBuilder": {
+    "ownerAddress": "0x3c69A9eBe7C544fB58D46b06897A08a1f41c1ca8"
+  }
+}
